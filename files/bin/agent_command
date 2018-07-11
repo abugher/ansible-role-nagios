@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+function fail {
+  echo -e "Error:  ${1}" >&2
+  exit 1
+}
+
+if ! test 2 == "${#}"; then
+  fail 'Wrong number of arguments.  Specify host and agent command.'
+fi
+
+agent_in="/tmp/agent_in"
+agent_out="/tmp/agent_out"
+
+rm -f "${agent_in}"
+mkfifo "${agent_in}"
+chmod 0600 "${agent_in}"
+rm -f "${agent_out}"
+mkfifo "${agent_out}"
+chmod 0600 "${agent_out}"
+
+ssh \
+  "${1}" \
+  socat UNIX-CONNECT:/tmp/agent_socket/socket - \
+  < "${agent_in}" \
+  > "${agent_out}" \
+  &
+
+# Hold agent_in open until the output is read.  Otherwise socat shuts down
+# before the output can be retrieved.
+{ 
+  echo "${2}"
+  read output
+} \
+  > "${agent_in}" \
+  < "${agent_out}"
+
+echo "${output}"
+
+rm "${agent_in}"
+rm "${agent_out}"

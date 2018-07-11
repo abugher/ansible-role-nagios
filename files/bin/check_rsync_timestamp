@@ -1,0 +1,34 @@
+#!/bin/bash
+
+timestamp="$(
+  /usr/local/bin/agent_command "${1}" rsync_timestamp 2>&1
+)" 
+agent_command_ret="${?}"
+
+if test '' == "${timestamp}"; then
+  echo "No recent log entries."
+  exit 2
+fi
+
+if ! test 0 == "${agent_command_ret}"; then 
+  echo "Error:  agent_command returned:  ${agent_command_ret}"
+  echo "Host address:  ${1}"
+  echo "Output:  ${timestamp}"
+  exit 2
+fi
+
+timestamp_hr="$(date -d "@${timestamp}")"
+now="$(date +%s)"
+delta="$(( ${now} - ${timestamp} ))"
+now_hr="$(date -d "@${now}")"
+
+if test ${timestamp} -gt ${now}; then
+  echo "Timestamp is in the future:  ${timestamp_hr}  (Current time:  ${now_hr})"
+  exit 2
+elif test ${delta} -gt $(( 60 * 60 * 24 * 2 )); then
+  echo "Timestamp is more than two days old:  ${timestamp_hr}"
+  exit 2
+else
+  echo "Timestamp is less than two days old:  ${timestamp_hr}"
+fi
+

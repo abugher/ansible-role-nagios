@@ -1,0 +1,10 @@
+#!/bin/bash
+
+output="$(/usr/local/bin/agent_command "${1}" ping)"
+if ! test "pong" = "${output}"; then
+  echo "Error:  Agent is unresponsive."
+  exit 2
+fi
+
+echo "Agent is responsive."
+exit 0
