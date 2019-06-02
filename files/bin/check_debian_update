@@ -4,8 +4,8 @@
 
 happy=0
 critical=2
-log_file='/var/log/update_debian.daily.log'
-ret_file='/var/log/update_debian.daily.ret'
+log_file='/var/log/update_debian.log'
+ret_file='/var/log/update_debian.ret'
 
 target="${1}"
 
