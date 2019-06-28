@@ -1,0 +1,38 @@
+#!/bin/bash
+
+stable=9
+testing=$(( stable + 1 ))
+oldstable=$(( stable - 1 ))
+
+release_text="$(ssh "${1}" cat /etc/os-release)"
+ssh_ret=$?
+if ! test 0 == "${ssh_ret}"; then
+  echo 'Failed to connect.'
+  exit 2
+fi
+eval "${release_text}"
+
+echo "${VERSION}"
+
+if grep '(sid)' <<< "${VERSION}"; then
+  echo "Debian sid - unstable - '${VERSION}'"
+  exit 1
+fi
+case "${VERSION_ID}" in
+  "${testing}")
+    echo "Debian ${VERSION_ID} - testing - '${VERSION}'"
+    exit 1
+    ;;
+  "${stable}")
+    echo "Debian ${VERSION_ID} - stable - '${VERSION}'"
+    exit 0
+    ;;
+  "${oldstable}")
+    echo "Debian ${VERSION_ID} - oldstable - '${VERSION}'"
+    exit 1
+    ;;
+  *)
+    echo "Debian ${VERSION_ID} - unknown - '${VERSION}'"
+    exit 2
+    ;;
+esac

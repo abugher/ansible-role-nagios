@@ -10,15 +10,20 @@ if ! test 2 == "${#}"; then
   fail 'Wrong number of arguments.  Specify host and agent command.'
 fi
 
-agent_in="/tmp/agent_in"
-agent_out="/tmp/agent_out"
+agent_in="/tmp/agent_in_pid_${$}"
+agent_out="/tmp/agent_out_pid_${$}"
 
 rm -f "${agent_in}"
-mkfifo "${agent_in}"
-chmod 0600 "${agent_in}"
+mkfifo "${agent_in}" \
+  || fail "Failed to mkfifo:  '${agent_in}'"
+
+chmod 0600 "${agent_in}" \
+  || fail "Failed to chmod:  '${agent_in}'"
 rm -f "${agent_out}"
-mkfifo "${agent_out}"
-chmod 0600 "${agent_out}"
+mkfifo "${agent_out}" \
+  || fail "Failed to mkfifo:  '${agent_out}'"
+chmod 0600 "${agent_out}" \
+  || fail "Failed to chmod:  '${agent_out}'"
 
 ssh \
   "${1}" \
@@ -38,5 +43,7 @@ ssh \
 
 echo "${output}"
 
-rm "${agent_in}"
-rm "${agent_out}"
+rm "${agent_in}" \
+  || fail "Failed to rm:  '${agent_in}'"
+rm "${agent_out}" \
+  || fail "Failed to rm:  '${agent_out}'"
