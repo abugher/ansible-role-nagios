@@ -1,11 +1,13 @@
 {% for g in groups %}
+{% if 'ungrouped' != g %}
 define hostgroup {
   hostgroup_name        {{ g }}
   alias                 {{ g }}
   members               {% for h in groups[g] -%}
-{{ h }},
+{% if hostvars[h].monitor is defined and hostvars[h].monitor == 'yes' %}{{ h }},{% endif %}
 {%- endfor %}
 
 }
 
+{% endif %}
 {% endfor %}

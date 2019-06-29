@@ -1,4 +1,5 @@
 {% for hostname in groups['all'] %}
+{% if hostvars[hostname].monitor is defined and hostvars[hostname].monitor == 'yes'%}
 define host {
   host_name             {{ hostname }}
 {% if hostvars[hostname].ip_address is defined %}
@@ -14,12 +15,10 @@ define host {
   parents               {{ hostvars[hostname].parent }}
 {% endif %}
 {% endif %}
-{% if hostvars[hostname].monitor is defined and hostvars[hostname].monitor == 'yes'%}
 {% if hostvars[hostname].platform is defined %}
   use                   {{ hostvars[hostname].platform }}
 {% else %}
   use                   generic-host
-{% endif %}
 {% endif %}
   max_check_attempts    4
   retry_interval        5
@@ -29,5 +28,5 @@ define host {
   notifications_enabled 0
 {% endif %}
 }
-
+{% endif %}
 {% endfor %}
