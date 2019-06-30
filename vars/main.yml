@@ -85,6 +85,11 @@ install_files:
   - owner:              'root'
     group:              'root'
     mode:               '0755'
+    src:                "{{ role_path }}/files/bin/check_port"
+    dest:               '/usr/local/bin/check_port'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0755'
     src:                "{{ role_path }}/files/bin/agent_command"
     dest:               '/usr/local/bin/agent_command'
   - owner:              'root'
