@@ -12,7 +12,7 @@ warning=1
 critical=2
 
 
-if test ${#} -ne 3; then
+if test ${#} -ne 2; then
   echo "Warning:  Usage:  ${0} <host> <port>"
   exit $warning
 fi
@@ -21,7 +21,9 @@ host="${1}"
 port="${2}"
 
 if nmap -p "${port}" "${host}"; then
+  echo "Open:  ${host}:${port}"
   exit $happy
 else
+  echo "Not open:  ${host}:${port}"
   exit $critical
 fi
