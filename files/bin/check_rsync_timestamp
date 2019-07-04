@@ -17,10 +17,10 @@ if ! test 0 == "${agent_command_ret}"; then
   exit 2
 fi
 
-timestamp_hr="$(date -d "@${timestamp}")"
+timestamp_hr="$(date -d "@${timestamp:-0}")"
 now="$(date +%s)"
-delta="$(( ${now} - ${timestamp} ))"
-now_hr="$(date -d "@${now}")"
+delta="$(( ${now:-0} - ${timestamp:-0} ))"
+now_hr="$(date -d "@${now:-0}")"
 
 if test ${timestamp} -gt ${now}; then
   echo "Timestamp is in the future:  ${timestamp_hr}  (Current time:  ${now_hr})"
