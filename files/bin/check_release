@@ -1,6 +1,6 @@
 #!/bin/bash
 
-stable=9
+stable=10
 testing=$(( stable + 1 ))
 oldstable=$(( stable - 1 ))
 
