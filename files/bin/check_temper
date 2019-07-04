@@ -7,8 +7,8 @@ LOW_CRITICAL_TEMPERATURE=32
 
 # I apologize for these quotation marks.
 raw_temperature=$(ssh $1 "/usr/local/bin/temper-poll -qf")
-temperature=$(echo $raw_temperature | sed 's/\..*//')
 service_ret=$?
+temperature=$(echo $raw_temperature | sed 's/\..*//')
 
 if ! test 0 = $service_ret; then
   echo "Bad exit value:  ${service_ret}."
