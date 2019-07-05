@@ -6,7 +6,7 @@ LOW_WARNING_TEMPERATURE=40
 LOW_CRITICAL_TEMPERATURE=32
 
 # I apologize for these quotation marks.
-raw_temperature=$(ssh $1 "/usr/local/bin/temper-poll -qf")
+raw_temperature=$(ssh $1 "/usr/local/bin/temperv14 -f")
 service_ret=$?
 temperature=$(echo $raw_temperature | sed 's/\..*//')
 
