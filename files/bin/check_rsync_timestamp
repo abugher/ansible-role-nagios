@@ -10,7 +10,7 @@ if test '' == "${timestamp}"; then
   exit 2
 fi
 
-if ! grep '^[0-9]*$' <<< "${timestamp}"; then
+if ! grep -q '^[0-9]*$' <<< "${timestamp}"; then
   echo "Not a timestamp:  '${timestamp}'"
   exit 2
 fi
@@ -22,12 +22,12 @@ if ! test 0 == "${agent_command_ret}"; then
   exit 2
 fi
 
-timestamp_hr="$(date -d "@${timestamp}")"
-now="$(date +%s)"
+timestamp_hr="$(date -d "@${timestamp}" 2>&1)"
+now="$(date +%s 2>&1)"
 delta="$(( ${now} - ${timestamp} ))"
-now_hr="$(date -d "@${now}")"
+now_hr="$(date -d "@${now}" 2>&1)"
 
-if ! grep '^[0-9]*$' <<< "${delta}"; then
+if ! grep -q '^[0-9]*$' <<< "${delta}"; then
   echo "Not a timestamp delta:  '${delta}'"
   exit 2
 fi
