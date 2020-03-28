@@ -1,5 +1,5 @@
 {% for hostname in groups['all'] %}
-{% if hostvars[hostname].monitor is defined and hostvars[hostname].monitor == 'yes'%}
+{% if hostname in groups['monitored'] %}
 define host {
   host_name             {{ hostname }}
 {% if hostvars[hostname].ip_address is defined %}
