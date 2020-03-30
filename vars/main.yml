@@ -157,13 +157,6 @@ template_files:
     mode:               '0644'
     src:                "templates/host_groups.cfg.j2"
     dest:               "/etc/nagios3/conf.d/host_groups.cfg"
-known_hosts:
-#  - 'neuron-mail'
-  - 'neuron'
-  - 'synapse'
-  - 'files'
-  - 'meliora'
-  - 'rudolph'
 enable_services:
   - 'nagios3'
 start_services:

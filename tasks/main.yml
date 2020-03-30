@@ -4,6 +4,8 @@
 - include:              '../tasks/install_files.yml'
 - include:              '../tasks/template_files.yml'
 - include:              '../tasks/known_hosts.yml'
+  vars:
+    known_hosts:        "{{ groups['monitored_ssh'] }}"
 - include:              '../tasks/enable_services.yml'
 - include:              '../tasks/start_services.yml'
 - include:              '../tasks/restart_services.yml'
