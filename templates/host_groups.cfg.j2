@@ -4,7 +4,7 @@ define hostgroup {
   hostgroup_name        {{ g }}
   alias                 {{ g }}
   members               {% for h in groups[g] -%}
-{% if h in groups['monitor'] %}{{ h }},{% endif %}
+{% if h in groups['monitored'] %}{{ h }},{% endif %}
 {%- endfor %}
 
 }
