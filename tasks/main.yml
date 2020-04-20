@@ -5,7 +5,7 @@
 - include:              '../tasks/template_files.yml'
 - include:              '../tasks/known_hosts.yml'
   vars:
-    known_hosts:        "{{ groups['monitored_ssh'] }}"
+    known_hosts:        "{% set monitored_sshd = [] %}{% set s = groups['sshd'] %}{% for h in groups['monitored'] %}{% if h in s %}{{ monitored_sshd.append(h) }}{% endif %}{% endfor %}{{ monitored_sshd }}"
 - include:              '../tasks/enable_services.yml'
 - include:              '../tasks/start_services.yml'
 - include:              '../tasks/restart_services.yml'
