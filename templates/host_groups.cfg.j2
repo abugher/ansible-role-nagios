@@ -1,13 +1,18 @@
-{% for g in groups %}
-{% if 'ungrouped' != g %}
+{% for group in groups %}
+  {%- if 'ungrouped' != group %}
 define hostgroup {
-  hostgroup_name        {{ g }}
-  alias                 {{ g }}
-  members               {% for h in groups[g] -%}
-{% if h in groups['monitored'] %}{{ h }},{% endif %}
-{%- endfor %}
+  hostgroup_name        {{ group }}
+  alias                 {{ group }}
+    {%- for host in group %}
+      {%- if host in groups['monitored'] %}
+        {%- if True != written %}
+  members               {% for host in group %}{% if host in groups['monitored'] %}{{ host }},{% endif %}{% endfor %}
+          {%- set written = True %}
+        {%- endif %}
+      {%- endif %}
+    {%- endfor %}
 
 }
+  {%- endif %}
 
-{% endif %}
 {% endfor %}
