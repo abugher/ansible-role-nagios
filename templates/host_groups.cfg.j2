@@ -6,7 +6,12 @@ define hostgroup {
     {%- for host in groups[group] %}
       {%- if host in groups['monitored'] %}
 
-  members               {% for host in groups[group] %}{% if host in groups['monitored'] %}{{ host }},{% endif %}{% endfor %}
+  members               {{ '' }}
+        {%- for host in groups[group] %}
+          {%- if host in groups['monitored'] -%}
+            {{ host }},
+          {%- endif %}
+        {%- endfor %}
         {%- break %}
       {%- endif %}
     {%- endfor %}
