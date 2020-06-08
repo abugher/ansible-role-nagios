@@ -5,7 +5,11 @@ sync_dirs:
   - src:                "files/conf/nagios3/"
     dest:               '/etc/nagios3/'
     delete:             'yes'
-    rsync_opts:         '--exclude="/conf.d/host_groups.cfg" --exclude="/conf.d/hosts.cfg"'
+    rsync_opts:         
+      - '--exclude'
+      - 'conf.d/host_groups.cfg'
+      - '--exclude'
+      - 'conf.d/hosts.cfg'
 install_files:
   - owner:              'root'
     group:              'root'
