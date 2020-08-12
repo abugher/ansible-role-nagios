@@ -20,8 +20,9 @@ define host {
 {% else %}
   use                   generic-host
 {% endif %}
-  max_check_attempts    4
+  normal_check_interval 5
   retry_interval        5
+  max_check_attempts    4
 {% if hostvars[hostname].notify is defined and hostvars[hostname].notify == 'yes' %}
   notifications_enabled 1
 {% else %}
