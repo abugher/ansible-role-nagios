@@ -27,7 +27,7 @@ now="$(date +%s 2>&1)"
 delta="$(( ${now} - ${timestamp} ))"
 now_hr="$(date -d "@${now}" 2>&1)"
 
-if ! grep -q '^[0-9]*$' <<< "${delta}"; then
+if ! grep -qE '^-{0,1}[0-9]*$' <<< "${delta}"; then
   echo "Not a timestamp delta:  '${delta}'"
   exit 2
 fi
