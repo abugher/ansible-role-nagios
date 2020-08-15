@@ -34,7 +34,7 @@ fi
 
 if test ${timestamp} -gt ${now}; then
   echo "Timestamp is in the future:  ${timestamp_hr} (${timestamp})  Current time:  ${now_hr} (${now})"
-  exit 2
+  exit 1
 elif test ${delta} -gt $(( 60 * 60 * 24 * 2 )); then
   echo "Timestamp is more than two days old:  ${timestamp_hr} (${timestamp})"
   exit 2
