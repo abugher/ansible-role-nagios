@@ -14,35 +14,35 @@ server {
   ssl_certificate_key   /etc/ssl/private/{{ inventory_hostname }}.pem;
   server_name           nagios nagios.neuronpointer.net;
 
-  root                  /usr/share/nagios3/htdocs;       
+  root                  /usr/share/nagios4/htdocs;       
   index index.php       index.html;
 
   auth_basic            "Nagios at {{ inventory_hostname }}";
-  auth_basic_user_file  /etc/nagios3/htpasswd.users;
+  auth_basic_user_file  /etc/nagios4/htpasswd.users;
 
-  # Nagios is pretty sure it lives at $servername/nagios3/.
-  location /nagios3/ {
-    alias               /usr/share/nagios3/htdocs/;
+  # Nagios is pretty sure it lives at $servername/nagios4/.
+  location /nagios4/ {
+    alias               /usr/share/nagios4/htdocs/;
   }
 
   location /stylesheets {
-    alias /etc/nagios3/stylesheets;
+    alias /etc/nagios4/stylesheets;
   }
 
-  location /nagios3/stylesheets {
-    alias /etc/nagios3/stylesheets;
+  location /nagios4/stylesheets {
+    alias /etc/nagios4/stylesheets;
   }
 
   location ~ \.cgi$ {
-    root /usr/lib/cgi-bin/nagios3;
+    root /usr/lib/cgi-bin/nagios4;
 
-    rewrite ^/cgi-bin/nagios3/(.*)$ /$1;
+    rewrite ^/cgi-bin/nagios4/(.*)$ /$1;
 
     include /etc/nginx/fastcgi_params;
 
     fastcgi_param AUTH_USER $remote_user;
     fastcgi_param REMOTE_USER $remote_user;
-    fastcgi_param SCRIPT_FILENAME /usr/lib/cgi-bin/nagios3$fastcgi_script_name;     
+    fastcgi_param SCRIPT_FILENAME /usr/lib/cgi-bin/nagios4$fastcgi_script_name;     
 
     fastcgi_pass fcgiwrap;
   }
