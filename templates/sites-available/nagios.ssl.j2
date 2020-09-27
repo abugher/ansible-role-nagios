@@ -1,11 +1,11 @@
 # See:  http://johan.cc/2012/02/06/nagios-nginx/
 
 upstream php {
-  server unix:/var/run/php5-fpm.sock;
+  server unix:/run/php/php7.3-fpm.sock;
 }
 
 upstream fcgiwrap {
-  server unix:/var/run/fcgiwrap.socket;
+  server unix:/run/fcgiwrap.socket;
 }
 
 server {

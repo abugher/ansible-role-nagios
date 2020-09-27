@@ -1,7 +1,11 @@
 ---
 - include:              '../tasks/install_packages.yml'
+- include:              '../tasks/lines_in_files.yml'
+- include:              '../tasks/lines_not_in_files.yml'
 - include:              '../tasks/sync_dirs.yml'
 - include:              '../tasks/install_files.yml'
+- include:              '../tasks/remove_files.yml'
+- include:              '../tasks/symlinks.yml'
 - include:              '../tasks/template_files.yml'
 - include:              '../tasks/known_hosts.yml'
   vars:
@@ -9,6 +13,10 @@
 - include:              '../tasks/enable_services.yml'
 - include:              '../tasks/start_services.yml'
 - include:              '../tasks/restart_services.yml'
-  when:                 install_files_result.changed
+  when:                 lines_in_files_result.changed
+                        or lines_not_in_files_result.changed
                         or sync_dirs_result.changed
+                        or install_files_result.changed
+                        or remove_files_result.changed
+                        or symlinks_result.changed
                         or template_files_result.changed

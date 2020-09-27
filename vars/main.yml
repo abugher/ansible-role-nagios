@@ -1,121 +1,29 @@
 ---
 install_packages:
   - 'nagios4'
+lines_in_files:
+  - line:               'date_format=iso8601'
+    regexp:             '^date_format='
+    dest:               '/etc/nagios4/nagios.cfg'
+lines_not_in_files:
+  - regexp:             'cfg_file=(.*)$'
+    dest:               '/etc/nagios4/nagios.cfg'
 sync_dirs:
-  - src:                "files/conf/nagios4/"
-    dest:               '/etc/nagios4/'
+  - src:                'files/conf/nagios4/conf.d/objects/'
+    dest:               '/etc/nagios4/conf.d/objects/'
     delete:             'yes'
-    rsync_opts:         
-      - '--exclude'
-      - 'conf.d/host_groups.cfg'
-      - '--exclude'
-      - 'conf.d/hosts.cfg'
+  - src:                'files/conf/nagios4/conf.d/services/'
+    dest:               '/etc/nagios4/conf.d/services/'
+    delete:             'yes'
+  - src:                'files/conf/nagios4/conf.d/templates/'
+    dest:               '/etc/nagios4/conf.d/templates/'
+    delete:             'yes'
 install_files:
   - owner:              'root'
     group:              'root'
     mode:               '0644'
-    src:                "{{ role_path }}/files/conf/nagios"
+    src:                "{{ role_path }}/files/conf/sites-available/nagios"
     dest:               '/etc/nginx/sites-available/nagios'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_update_live-build.amd64"
-    dest:               '/usr/local/bin/check_update_live-build.amd64'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_update_live-build.i386"
-    dest:               '/usr/local/bin/check_update_live-build.i386'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_flexget_execute"
-    dest:               '/usr/local/bin/check_flexget_execute'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_debian_update"
-    dest:               '/usr/local/bin/check_debian_update'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_flexget_execute"
-    dest:               '/usr/local/bin/check_flexget_execute'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_flexget_vacuum"
-    dest:               '/usr/local/bin/check_flexget_vacuum'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_mplayer"
-    dest:               '/usr/local/bin/check_mplayer'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_pianobar"
-    dest:               '/usr/local/bin/check_pianobar'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_transmission_blocklist_update"
-    dest:               '/usr/local/bin/check_transmission_blocklist_update'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_transmission"
-    dest:               '/usr/local/bin/check_transmission'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_tor"
-    dest:               '/usr/local/bin/check_tor'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_dns_record"
-    dest:               '/usr/local/bin/check_dns_record'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_temper"
-    dest:               '/usr/local/bin/check_temper'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_version_string"
-    dest:               '/usr/local/bin/check_version_string'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_port"
-    dest:               '/usr/local/bin/check_port'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/agent_command"
-    dest:               '/usr/local/bin/agent_command'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_agent"
-    dest:               '/usr/local/bin/check_agent'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_rsync_timestamp"
-    dest:               '/usr/local/bin/check_rsync_timestamp'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_release"
-    dest:               '/usr/local/bin/check_release'
-  - owner:              'root'
-    group:              'root'
-    mode:               '0755'
-    src:                "{{ role_path }}/files/bin/check_vpn_interface"
-    dest:               '/usr/local/bin/check_vpn_interface'
   - owner:              'nagios'
     group:              'nagios'
     mode:               '0600'
@@ -136,6 +44,8 @@ install_files:
     mode:               '0644'
     src:                "../../../sensitive_ansible/roles/nagios/files/conf/htpasswd.users"
     dest:               '/etc/nagios4/htpasswd.users'
+remove_files:
+  - '/etc/nagios4/objects/'
 symlinks:
   - owner:              'root'
     group:              'root'
@@ -149,7 +59,7 @@ template_files:
   - owner:              'root'
     group:              'root'
     mode:               '0644'
-    src:                "{{ role_path }}/templates/nagios.ssl.j2"
+    src:                "{{ role_path }}/templates/sites-available/nagios.ssl.j2"
     dest:               '/etc/nginx/sites-available/nagios.ssl'
   - owner:              'root'
     group:              'root'
@@ -163,8 +73,14 @@ template_files:
     dest:               "/etc/nagios4/conf.d/host_groups.cfg"
 enable_services:
   - 'nagios4'
+#  - 'php7.3-fpm'
+#  - 'fcgiwrap'
 start_services:
   - 'nagios4'
+#  - 'php7.3-fpm'
+#  - 'fcgiwrap'
 restart_services:
   - 'nagios4'
+#  - 'php7.3-fpm'
+#  - 'fcgiwrap'
   - 'nginx'
