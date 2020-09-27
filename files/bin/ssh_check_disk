@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# defaults
+WARNING_THRESHOLD=10
+CRITICAL_THRESHOLD=5
+
+# arguments
+while test "${#}" -gt 0; do
+  case "${1}" in
+    '-w')
+      shift 1
+      WARNING_THRESHOLD="${1}"
+    ;;
+    '-c')
+      shift 1
+      CRITICAL_THRESHOLD="${1}"
+    ;;
+    *)
+      if ! test 'set' = "${TARGET_HOST:+set}"; then
+        TARGET_HOST="${1}"
+      elif ! test 'set' = "${MOUNT_POINT:+set}"; then 
+        MOUNT_POINT="${1}"
+      else
+        echo "Unrecognized option:  '${1}'" >&2
+        exit 2
+      fi
+    ;;
+  esac
+  shift 1
+done
+
+if ! test 'set' = "${TARGET_HOST:+set}"; then
+  echo "Target host not set."
+  exit 2
+fi
+
+if ! test 'set' = "${MOUNT_POINT:+set}"; then
+  echo "Target mount point not set."
+  exit 2
+fi
+
+percent="$(
+  ssh "${TARGET_HOST}" df "${MOUNT_POINT}" \
+    | tail -n +2 \
+    | awk '{print $5}' \
+    | sed 's/%$//'
+)"
+
+if test "${percent}" -le "${CRITICAL_THRESHOLD}"; then
+  echo "Available capacity:  ${percent}%"
+  exit 2
+fi
+
+if test "${percent}" -le "${WARNING_THRESHOLD}"; then
+  echo "Available capacity:  ${percent}%"
+  exit 1
+fi
