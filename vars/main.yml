@@ -5,6 +5,9 @@ lines_in_files:
   - line:               'date_format=iso8601'
     regexp:             '^date_format='
     dest:               '/etc/nagios4/nagios.cfg'
+  - line:               'use_authentication=1'
+    regexp:             '^use_authentication='
+    dest:               '/etc/nagios4/cgi.cfg'
 lines_not_in_files:
   - regexp:             'cfg_file=(.*)$'
     dest:               '/etc/nagios4/nagios.cfg'
@@ -18,6 +21,9 @@ sync_dirs:
   - src:                'files/conf/nagios4/conf.d/templates/'
     dest:               '/etc/nagios4/conf.d/templates/'
     delete:             'yes'
+  - src:                'files/bin/'
+    dest:               '/usr/local/bin/'
+    delete:             'no'
 install_files:
   - owner:              'root'
     group:              'root'
