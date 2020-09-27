@@ -1,0 +1,5 @@
+server {
+  server_name           nagios nagios.{{ domain }};
+  return 301            https://nagios.{{ domain }}$request_uri;
+}
+

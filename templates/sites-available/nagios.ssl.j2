@@ -12,10 +12,10 @@ server {
   listen                443 ssl;
   ssl_certificate       /etc/ssl/certs/{{ inventory_hostname }}.pem;
   ssl_certificate_key   /etc/ssl/private/{{ inventory_hostname }}.pem;
-  server_name           nagios nagios.neuronpointer.net;
+  server_name           nagios nagios.{{ domain }};
 
   root                  /usr/share/nagios4/htdocs;       
-  index index.php       index.html;
+  index                 index.php index.html;
 
   auth_basic            "Nagios at {{ inventory_hostname }}";
   auth_basic_user_file  /etc/nagios4/htpasswd.users;
