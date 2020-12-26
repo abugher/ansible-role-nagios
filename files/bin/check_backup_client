@@ -45,8 +45,8 @@ done
 
 overall_ret=0
 for ret in "${rets[@]}"; do
-  if ! grep -qE '^[0-9]+$' <<< "${ret }"; then
-    fail_critical "Invalid return value:  ${ret }"
+  if ! grep -qE '^[0-9]+$' <<< "${ret}"; then
+    fail_critical "Invalid return value:  ${ret}"
   fi
   if test "${ret}" -ne 0; then
     overall_ret=1
