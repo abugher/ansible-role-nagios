@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# DISTRIBUTED BY ANSIBLE
+
+happy=0
+critical=2
+max_age_days=2
+max_delta="$(( 60 * 60 * 24 * max_age_days ))"
+
+target="${1}"
+
+
+function fail_critical() {
+  printf '%s\n' "${1}"
+  exit "${critical}"
+}
+
+ret_files=( $(ssh "${target}" ls '/var/log/backup-for-*.ret') ) \
+  || fail_critical "Failed to find backup return files."
+
+last_update_timestamps=()
+for ret_file in "${ret_files[@]}"; do
+  last_update_timestamps+=( "$( ssh "${target}" stat -c "%Y" "${ret_file}" )" )
+done
+
+now_timestamp="$(ssh "${target}" date "+%s")"
+
+if ! grep -qE '^[0-9]+$' <<< "${now_timestamp}"; then
+  fail_critical "Invalid current timestamp:  ${now_timestamp}"
+fi
+
+deltas=()
+for last_update_timestamp in "${last_update_timestamps[@]}"; do
+  if ! grep -qE '^[0-9]+$' <<< "${last_update_timestamp}"; then
+    fail_critical "Invalid file timestamp:  ${last_update_timestamp}"
+  fi
+  deltas+=( "$(( now_timestamp - last_update_timestamp ))" )
+done
+
+rets=()
+for ret_file in "${ret_files[@]}"; do
+  rets+=( "$( ssh "${target}" cat "${ret_file}" )" )
+done
+
+overall_ret=0
+for ret in "${rets[@]}"; do
+  if ! grep -qE '^[0-9]+$' <<< "${ret }"; then
+    fail_critical "Invalid return value:  ${ret }"
+  fi
+  if test "${ret}" -ne 0; then
+    overall_ret=1
+  fi
+done
+
+if test "${overall_ret}" -ne 0; then
+  fail_critical "Backups were unsuccessful.  Return codes:  ${rets[*]}"
+fi
+
+exit_code="${happy}"
+echo "Last backups (seconds in the past):  ${deltas[*]}"
+for delta in "${deltas[@]}"; do
+  if test "${delta}" -ge "${max_delta}" || test "${delta}" -lt 0; then
+    exit_code="${critical}"
+  fi
+done
+
+exit "${exit_code}"
