@@ -3,9 +3,9 @@
 target=$1
 
 wan_ip_address=$(ssh $target dig +short myip.opendns.com @resolver1.opendns.com)
-dns_record=$(dig @8.8.8.8 +short neuronpointer.net)
+dns_record=$(dig @8.8.8.8 +short neuron.neuronpointer.net)
 
-echo "WAN IP address:  ${wan_ip_address};  neuronpointer.net:  ${dns_record}"
+echo "WAN IP address:  ${wan_ip_address};  neuron.neuronpointer.net:  ${dns_record}"
 
 if test $wan_ip_address = $dns_record ; then
   exit 0
