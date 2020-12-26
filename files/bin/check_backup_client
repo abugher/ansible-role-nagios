@@ -15,6 +15,7 @@ function fail_critical() {
   exit "${critical}"
 }
 
+
 ret_files=( $(ssh "${target}" ls '/var/log/backup-for-*.ret') ) \
   || fail_critical "Failed to find backup return files."
 
