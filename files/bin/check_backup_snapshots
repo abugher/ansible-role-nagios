@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# DISTRIBUTED BY ANSIBLE
+
+target="${1}"
+shift
+this_year="$(date '+%Y')"
+this_month="$(date '+%Y-%m')"
+this_day="$(date '+%Y-%m-%d')"
+this_hour="$(date '+%Y-%m-%dT%H')"
+# If "backup_prefix" is configurable per host, this should respect the per host setting.  Maybe it should just be /backup, though.
+ssh "${target}" for now in "${this_year}" "${this_month}" "${this_day}" "${this_hour}"\; do \
+  snapshot="/backup/snapshots/\${now}"\; \
+  if ! ls -d "\${snapshot}" \>/dev/null 2\>\&1\; then \
+    echo "Missing snapshot:  \${snapshot}"\; \
+    exit 2\; \
+  fi\; \
+  if ! ls -d "\${snapshot}/snapshots" \>/dev/null 2\>\&1\; then \
+    echo "Empty / corrupt snapshot:  \${snapshot}"\; \
+    exit 2\; \
+  fi\; \
+done
+
+echo "Current snapshots exist."
+exit 0
