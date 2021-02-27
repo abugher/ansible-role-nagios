@@ -3,6 +3,7 @@ install_packages:
   - 'nagios4'
   - 'php7.3-fpm'
   - 'nmap'
+  - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
 lines_in_files:
   - line:               'date_format=iso8601'
     regexp:             '^date_format='
