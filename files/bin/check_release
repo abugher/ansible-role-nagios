@@ -1,8 +1,16 @@
 #!/bin/bash
 
-stable=10
-testing=$(( stable + 1 ))
-oldstable=$(( stable - 1 ))
+debian_stable=10
+devuan_stable=3
+ubuntu_lts=(
+  '20.04'
+  '18.04'
+  '16.04'
+)
+ubuntu_esm=(
+  '14.04'
+  '12.04'
+)
 
 release_text="$(ssh "${1}" cat /etc/os-release)"
 ssh_ret=$?
@@ -18,21 +26,79 @@ if grep '(sid)' <<< "${VERSION}"; then
   echo "Debian sid - unstable - '${VERSION}'"
   exit 1
 fi
-case "${VERSION_ID}" in
-  "${testing}")
-    echo "Debian ${VERSION_ID} - testing - '${VERSION}'"
-    exit 0
+case "${ID}" in
+  'debian')
+    stable="${debian_stable}"
+    debian_testing="$(( stable + 1 ))"
+    debian_oldstable="$(( stable - 1 ))"
+    case "${VERSION_ID}" in
+      "${testing}")
+        echo "Debian ${VERSION_ID} - testing - '${VERSION}'"
+        exit 0
+        ;;
+      "${stable}")
+        echo "Debian ${VERSION_ID} - stable - '${VERSION}'"
+        exit 0
+        ;;
+      "${oldstable}")
+        echo "Debian ${VERSION_ID} - oldstable - '${VERSION}'"
+        exit 1
+        ;;
+      *)
+        echo "Debian ${VERSION_ID} - unknown - '${VERSION}'"
+        exit 2
+        ;;
+    esac
     ;;
-  "${stable}")
-    echo "Debian ${VERSION_ID} - stable - '${VERSION}'"
-    exit 0
+  'devuan')
+    stable="${debian_stable}"
+    debian_testing="$(( stable + 1 ))"
+    debian_oldstable="$(( stable - 1 ))"
+    case "${VERSION_ID}" in
+      "${testing}")
+        echo "Devuan ${VERSION_ID} - testing - '${VERSION}'"
+        exit 0
+        ;;
+      "${stable}")
+        echo "Devuan ${VERSION_ID} - stable - '${VERSION}'"
+        exit 0
+        ;;
+      "${oldstable}")
+        echo "Devuan ${VERSION_ID} - oldstable - '${VERSION}'"
+        exit 1
+        ;;
+      *)
+        echo "Devuan ${VERSION_ID} - unknown - '${VERSION}'"
+        exit 2
+        ;;
+    esac
     ;;
-  "${oldstable}")
-    echo "Debian ${VERSION_ID} - oldstable - '${VERSION}'"
-    exit 1
+  'ubuntu')
+    for version in "${ubuntu_lts[@]}"; do
+      if test "${VERSION_ID}" = "${version}"; then
+        echo "Ubuntu ${VERSION_ID} (LTS) - ${VERSION}"
+        exit 0
+      fi
+      if test "${VERSION_ID/.*}" = "${version/.*}"; then
+        echo "Ubuntu ${VERSION_ID} - ${VERSION}"
+        exit 0
+      fi
+    done
+    for version in "${ubuntu_esm[@]}"; do
+      if test "${VERSION_ID}" = "${version}"; then
+        echo "Ubuntu ${VERSION_ID} (LTS) (ESM) - ${VERSION}"
+        exit 1
+      fi
+      if test "${VERSION_ID/.*}" = "${version/.*}"; then
+        echo "Ubuntu ${VERSION_ID} (ESM) - ${VERSION}"
+        exit 1
+      fi
+    done
+    echo "Unrecognized Ubuntu version:  ${VERSION_ID} (${VERSION})"
+    exit 2
     ;;
   *)
-    echo "Debian ${VERSION_ID} - unknown - '${VERSION}'"
-    exit 2
+    echo "Unrecognized OS:  ${ID}"
+    exit 1
     ;;
 esac
