@@ -27,6 +27,12 @@ if grep '(sid)' <<< "${VERSION}"; then
   exit 1
 fi
 case "${ID}" in
+  'armbian')
+    ;&
+  'raspbian')
+    ;&
+  'raspios')
+    ;&
   'debian')
     stable="${debian_stable}"
     debian_testing="$(( stable + 1 ))"
