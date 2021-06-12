@@ -35,8 +35,8 @@ case "${ID}" in
     ;&
   'debian')
     stable="${debian_stable}"
-    debian_testing="$(( stable + 1 ))"
-    debian_oldstable="$(( stable - 1 ))"
+    testing="$(( stable + 1 ))"
+    oldstable="$(( stable - 1 ))"
     case "${VERSION_ID}" in
       "${testing}")
         echo "Debian ${VERSION_ID} - testing - '${VERSION}'"
@@ -57,9 +57,9 @@ case "${ID}" in
     esac
     ;;
   'devuan')
-    stable="${debian_stable}"
-    debian_testing="$(( stable + 1 ))"
-    debian_oldstable="$(( stable - 1 ))"
+    stable="${devuan_stable}"
+    testing="$(( stable + 1 ))"
+    oldstable="$(( stable - 1 ))"
     case "${VERSION_ID}" in
       "${testing}")
         echo "Devuan ${VERSION_ID} - testing - '${VERSION}'"
