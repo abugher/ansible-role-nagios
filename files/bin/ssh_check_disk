@@ -46,7 +46,7 @@ percent_used="$(
     | sed 's/%$//'
 )"
 
-if ! grep -E '^1?[0-9][0-9]$' <<< "${percent_used}"; then
+if ! grep -qE '^1?[0-9][0-9]$' <<< "${percent_used}"; then
   echo "Invalid percent used:  ${percent_used}"
   exit 2
 fi
