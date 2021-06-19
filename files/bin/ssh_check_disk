@@ -39,22 +39,29 @@ if ! test 'set' = "${MOUNT_POINT:+set}"; then
   exit 2
 fi
 
-percent="$(
+percent_used="$(
   ssh "${TARGET_HOST}" df "${MOUNT_POINT}" \
     | tail -n +2 \
     | awk '{print $5}' \
     | sed 's/%$//'
 )"
 
-if test "${percent}" -le "${CRITICAL_THRESHOLD}"; then
-  echo "Available capacity:  ${percent}%"
+if ! grep -E '^1?[0-9][0-9]$' <<< "${percent_used}"; then
+  echo "Invalid percent used:  ${percent_used}"
   exit 2
 fi
 
-if test "${percent}" -le "${WARNING_THRESHOLD}"; then
-  echo "Available capacity:  ${percent}%"
+percent_free="$(( 100 - percent_used ))"
+
+if test "${percent_free}" -le "${CRITICAL_THRESHOLD}"; then
+  echo "Available capacity:  ${percent_free}%"
+  exit 2
+fi
+
+if test "${percent_free}" -le "${WARNING_THRESHOLD}"; then
+  echo "Available capacity:  ${percent_free}%"
   exit 1
 fi
 
-echo "Available capacity:  ${percent}%"
+echo "Available capacity:  ${percent_free}%"
 exit 0
