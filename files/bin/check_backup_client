@@ -48,9 +48,20 @@ for ret in "${rets[@]}"; do
   if ! grep -qE '^[0-9]+$' <<< "${ret}"; then
     fail_critical "Invalid return value:  ${ret}"
   fi
-  if test "${ret}" -ne 0; then
-    overall_ret=1
-  fi
+  case "${ret}" in
+    0)
+      true
+      ;;
+    24)
+      # Disappearing source files are normal for a live FS.  Backing up a
+      # snapshot would avoid this.
+      true
+      ;;
+    *)
+      # Failure.
+      overall_ret=1
+      ;;
+  esac
 done
 
 if test "${overall_ret}" -ne 0; then
