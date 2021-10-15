@@ -1,7 +1,10 @@
 #!/bin/bash
 
-debian_stable=10
-devuan_stable=3
+# https://www.debian.org/releases/
+debian_stable=11
+# https://www.devuan.org/os/releases
+devuan_stable=4
+# https://wiki.ubuntu.com/Releases
 ubuntu_lts=(
   '20.04'
   '18.04'
