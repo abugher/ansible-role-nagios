@@ -1,7 +1,7 @@
 ---
 install_packages:
   - 'nagios4'
-  - 'php7.3-fpm'
+  - 'php7.4-fpm'
   - 'nmap'
   - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
 lines_in_files:
@@ -82,14 +82,14 @@ template_files:
     dest:               "/etc/nagios4/conf.d/host_groups.cfg"
 enable_services:
   - 'nagios4'
-  - 'php7.3-fpm'
+  - 'php7.4-fpm'
   - 'fcgiwrap'
 start_services:
   - 'nagios4'
-  - 'php7.3-fpm'
+  - 'php7.4-fpm'
   - 'fcgiwrap'
 restart_services:
   - 'nagios4'
-  - 'php7.3-fpm'
+  - 'php7.4-fpm'
   - 'fcgiwrap'
   - 'nginx'
