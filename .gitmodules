@@ -1,0 +1,3 @@
+[submodule "files/nagios-core-dark-theme"]
+	path = files/nagios-core-dark-theme
+	url = git@github.com:zmehu/nagios-core-dark-theme.git
