@@ -1,38 +1,61 @@
 #!/bin/bash
 
-cd /sys/class/thermal/
+ret=0
+warning=50
+critical=60
 
-unset zones
-zones=()
-zone_indices=()
+function main() {
+  cd /sys/class/thermal/
 
-for zone in thermal_zone*; do
-  i="$(sed 's/^thermal_zone//' <<< "${zone}")"
-  zones["${i}"]=''
-  zone_indices+=( "${i}" )
-done
+  unset zones
+  zones=()
+  zone_indices=()
 
-for ti in {1..10}; do
-  sleep 1
-#  printf '.' >&2
+  for zone in thermal_zone*; do
+    i="$(sed 's/^thermal_zone//' <<< "${zone}")"
+    zones["${i}"]=''
+    zone_indices+=( "${i}" )
+  done
+
+  for ti in {1..10}; do
+    sleep 1
+  #  printf '.' >&2
+    for zi in "${zone_indices[@]}"; do
+      zone="thermal_zone${zi}"
+      zones["${zi}"]="${zones[${zi}]} $(cat "${zone}/temp")"
+    done
+  done
+  #printf '\n' >&2
+
   for zi in "${zone_indices[@]}"; do
-    zone="thermal_zone${zi}"
-    zones["${zi}"]="${zones[${zi}]} $(cat "${zone}/temp")"
+    read -a temps <<< "${zones[${zi}]}"
+    average=0
+    for temp_raw in "${temps[@]}"; do
+      average=$(( average + temp_raw ))
+    done
+    average="$(bc <<< "scale=0; ${average} / ${#temps[@]} / 1000")"
+    if test "${average}" -gt "${critical}"; then critical; fi
+    if test "${average}" -gt "${warning}"; then warning; fi
+    printf 'Zone %s:  %s°C;  ' "${zi}" "${average}"
   done
-done
-#printf '\n' >&2
+  printf '\n'
 
-for zi in "${zone_indices[@]}"; do
-  read -a temps <<< "${zones[${zi}]}"
-#  for temp_raw in "${temps[@]}"; do
-#    temp_pretty="$(bc <<< "scale=0; ${temp_raw} / 1000")"
-#    printf ' %s' "${temp_pretty}"
-#  done
-  average=0
-  for temp_raw in "${temps[@]}"; do
-    average=$(( average + temp_raw ))
-  done
-  average="$(bc <<< "scale=0; ${average} / ${#temps[@]} / 1000")"
-  printf 'Zone %s:  %s°C;  ' "${zi}" "${average}"
-done
-printf '\n'
+  return "${ret}"
+}
+
+
+function critical() {
+  ret=2
+}
+
+
+function warning() {
+  if test 2 = "${ret}"; then
+    return 0
+  else
+    ret=1
+  fi
+}
+
+
+main
