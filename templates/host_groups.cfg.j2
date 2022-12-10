@@ -4,11 +4,11 @@ define hostgroup {
   hostgroup_name        {{ group }}
   alias                 {{ group }}
     {%- for host in groups[group] %}
-      {%- if host in groups['monitored'] %}
+      {%- if host in groups['monitored'] + groups['monitored-unmanaged'] %}
 
   members               {{ '' }}
         {%- for host in groups[group] %}
-          {%- if host in groups['monitored'] -%}
+          {%- if host in groups['monitored'] + groups['monitored-unmanaged'] -%}
             {{ host }},
           {%- endif %}
         {%- endfor %}
