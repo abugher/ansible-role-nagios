@@ -3,40 +3,47 @@
 # DISTRIBUTED BY ANSIBLE
 
 happy=0
+warning=1
 critical=2
 log_file='/var/log/update_debian.log'
 ret_file='/var/log/update_debian.ret'
+success_file='/var/log/update_debian.last_success'
 
 target="${1}"
 
 max_age_days=2
-max_delta=$(( 60 * 60 * 24 * $max_age_days ))
+max_time_since_success=$(( 60 * 60 * 24 * $max_age_days ))
 
-last_update_timestamp="$(
-  ssh "${target}" stat -c "%Y" "${ret_file}"
-)"
-now_timestamp="$(
-  ssh "${target}" date "+%s"
-)"
+if ! now_timestamp="$(ssh "${target}" date "+%s")"; then
+  echo "Critical:  Failed to obtain current timestamp."
+  exit $critical
+fi
 
-delta=$(( $now_timestamp - $last_update_timestamp ))
+if ! last_success_timestamp="$(ssh "${target}" cat "${success_file}")"; then
+  echo "Critical:  Failed to obtain timestamp of last success."
+  exit $critical
+fi
+
+time_since_success=$(( now_timestamp - last_success_timestamp ))
 
 ret="$(
   ssh "${target}" cat "${ret_file}"
 )"
 
-if test $ret -ne 0; then
-  echo "Debian update Critical!  Return status:  ${ret}"
-  exit $critical
-fi
-
 if
-     test $delta -lt $max_delta \
-  && test $delta -gt 0
+  test $time_since_success -gt $max_time_since_success \
+  || test $time_since_success -le 0
 then
-  echo "Debian update OK.  Last update returned ${ret} at ${delta} seconds ago."
-  exit $happy
-else
-  echo "Debian update Critical!  Last update returned ${ret} at ${delta} seconds ago."
+  echo "Debian update:  Critical!  Last successful update was ${time_since_success} seconds ago.  (Most recent return status:  ${ret})"
   exit $critical
 fi
+if test $ret -eq 0; then
+  echo "Debian update:  OK.  Last update returned ${ret} at ${time_since_success} seconds ago."
+  exit $happy
+fi
+if test $ret -eq 5; then
+  echo "Debian update:  Warning!  Last update returned ${ret} at ${time_since_success} seconds ago."
+  exit $warning
+fi
+echo "Debian update:  Critical!  Last update returned ${ret} at ${time_since_success} seconds ago."
+exit $critical
