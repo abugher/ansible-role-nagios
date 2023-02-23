@@ -1,6 +1,0 @@
----
-dependencies:
-  - role:       'nginx'
-    when:       skipdeps is not defined
-  - role:       'ssh_client'
-    when:       skipdeps is not defined

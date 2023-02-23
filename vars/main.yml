@@ -96,3 +96,5 @@ restart_services:
   - 'php7.4-fpm'
   - 'fcgiwrap'
   - 'nginx'
+  - 'nginx'
+  - 'ssh_client'
