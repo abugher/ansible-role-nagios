@@ -34,7 +34,7 @@ install_files:
   - owner:              'nagios'
     group:              'nagios'
     mode:               '0600'
-    src:                "../../../sensitive_ansible/inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa"
+    src:                "../../../sensitive-ansible/inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa"
     dest:               '~nagios/.ssh/id_rsa'
   - owner:              'nagios'
     group:              'nagios'
@@ -49,7 +49,7 @@ install_files:
   - owner:              'root'
     group:              'root'
     mode:               '0644'
-    src:                "../../../sensitive_ansible/roles/nagios/files/conf/htpasswd.users"
+    src:                "../../../sensitive-ansible/roles/nagios/files/conf/htpasswd.users"
     dest:               '/etc/nagios4/htpasswd.users'
 remove_files:
   - '/etc/nagios4/objects/'
@@ -97,4 +97,4 @@ restart_services:
   - 'fcgiwrap'
   - 'nginx'
   - 'nginx'
-  - 'ssh_client'
+  - 'ssh-client'
