@@ -1,4 +1,7 @@
 ---
+dependencies:
+  - 'nginx'
+  - 'ssh-client'
 install_packages:
   - 'nagios4'
   - 'php7.4-fpm'
@@ -96,5 +99,3 @@ restart_services:
   - 'php7.4-fpm'
   - 'fcgiwrap'
   - 'nginx'
-  - 'nginx'
-  - 'ssh-client'
