@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # https://www.debian.org/releases/
-debian_stable=11
+debian_stable=12
 # https://www.devuan.org/os/releases
 devuan_stable=4
 # https://wiki.ubuntu.com/Releases
 ubuntu_lts=(
+  '22.04'
   '20.04'
-  '18.04'
-  '16.04'
 )
 ubuntu_esm=(
+  '18.04'
+  '16.04'
   '14.04'
-  '12.04'
 )
 
 release_text="$(ssh "${1}" cat /etc/os-release)"
@@ -29,6 +29,12 @@ if grep '(sid)' <<< "${VERSION}"; then
   echo "Debian sid - unstable - '${VERSION}'"
   exit 1
 fi
+
+if grep '(ceres)' <<< "${VERSION}"; then
+  echo "Devuan ceres - unstable - '${VERSION}'"
+  exit 1
+fi
+
 case "${ID}" in
   'armbian')
     ;&
@@ -38,9 +44,14 @@ case "${ID}" in
     ;&
   'debian')
     stable="${debian_stable}"
+    unstable="$(( stable + 2 ))"
     testing="$(( stable + 1 ))"
     oldstable="$(( stable - 1 ))"
     case "${VERSION_ID}" in
+      "${unstable}")
+        echo "Debian ${VERSION_ID} - unstable - '${VERSION}'"
+        exit 1
+        ;;
       "${testing}")
         echo "Debian ${VERSION_ID} - testing - '${VERSION}'"
         exit 0
@@ -61,9 +72,14 @@ case "${ID}" in
     ;;
   'devuan')
     stable="${devuan_stable}"
+    unstable="$(( stable + 2 ))"
     testing="$(( stable + 1 ))"
     oldstable="$(( stable - 1 ))"
     case "${VERSION_ID}" in
+      "${unstable}")
+        echo "Devuan ${VERSION_ID} - unstable - '${VERSION}'"
+        exit 1
+        ;;
       "${testing}")
         echo "Devuan ${VERSION_ID} - testing - '${VERSION}'"
         exit 0
