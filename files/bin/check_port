@@ -4,8 +4,7 @@
 
 # script_name <host> <port>
 #
-# Run an nmap version check (-sV) against host "host" on port "port", and
-# confirm that nmap returns version string "string".
+# Confirm that port is open on host.
 
 happy=0
 warning=1
