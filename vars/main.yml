@@ -1,10 +1,11 @@
 ---
+php_fpm:                'php8.2-fpm'
 dependencies:
   - 'nginx'
   - 'ssh-client'
 install_packages:
   - 'nagios4'
-  - 'php7.4-fpm'
+  - "{{ php_fpm }}"
   - 'nmap'
   - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
 lines_in_files:
@@ -88,14 +89,14 @@ template_files:
     dest:               "/etc/nagios4/conf.d/host_groups.cfg"
 enable_services:
   - 'nagios4'
-  - 'php7.4-fpm'
+  - "{{ php_fpm }}"
   - 'fcgiwrap'
 start_services:
   - 'nagios4'
-  - 'php7.4-fpm'
+  - "{{ php_fpm }}"
   - 'fcgiwrap'
 restart_services:
   - 'nagios4'
-  - 'php7.4-fpm'
+  - "{{ php_fpm }}"
   - 'fcgiwrap'
   - 'nginx'
