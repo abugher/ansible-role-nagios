@@ -1,8 +1,5 @@
 ---
 php_fpm:                'php8.2-fpm'
-dependencies:
-  - 'nginx'
-  - 'ssh-client'
 install_packages:
   - 'nagios4'
   - "{{ php_fpm }}"

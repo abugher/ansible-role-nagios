@@ -1,0 +1,8 @@
+---
+dependencies:
+  - role:     'nginx'
+    tags:     
+      - 'dependency'
+  - role:     'ssh-client'
+    tags:     
+      - 'dependency'
