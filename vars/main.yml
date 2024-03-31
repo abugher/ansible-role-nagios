@@ -86,6 +86,7 @@ template_files:
     dest:               "/etc/nagios4/conf.d/host_groups.cfg"
 commands:
   - command:            /usr/sbin/nagios4 -v /etc/nagios4/nagios.cfg
+    changed_when:       False
 enable_services:
   - 'nagios4'
   - "{{ php_fpm }}"
