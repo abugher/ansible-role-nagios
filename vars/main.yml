@@ -84,6 +84,8 @@ template_files:
     mode:               '0644'
     src:                "templates/host_groups.cfg.j2"
     dest:               "/etc/nagios4/conf.d/host_groups.cfg"
+commands:
+  - command:            /usr/sbin/nagios4 -v /etc/nagios4/nagios.cfg
 enable_services:
   - 'nagios4'
   - "{{ php_fpm }}"
