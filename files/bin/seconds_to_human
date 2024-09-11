@@ -1,0 +1,67 @@
+#!/bin/bash
+
+total_seconds="${1}"
+
+seconds=$(( total_seconds % 60 ))
+total_minutes=$(( total_seconds / 60 ))
+
+minutes=$(( total_minutes % 60 ))
+total_hours=$(( total_minutes / 60 ))
+
+hours=$(( total_hours % 24 ))
+days=$(( total_hours / 24 ))
+
+output='no'
+comma='no'
+
+if ! test 0 = "${days}"; then
+  output='yes'
+  comma='yes'
+fi
+
+if test 'yes' = "${output}"; then
+  if test 1 = "${days}"; then
+    printf "%s day, " "${days}"
+  else
+    printf "%s days, " "${days}"
+  fi
+fi
+
+if ! test 0 = "${hours}"; then
+  output='yes'
+  comma='yes'
+fi
+
+if test 'yes' = "${output}"; then
+  if test 1 = "${hours}"; then
+    printf "%s hour, " "${hours}"
+  else
+    printf "%s hours, " "${hours}"
+  fi
+fi
+
+if ! test 0 = "${minutes}"; then
+  output='yes'
+fi
+
+if test 'yes' = "${output}"; then
+  if test 'yes' = "${comma}"; then
+    if test 1 = "${minutes}"; then
+      printf "%s minute, and " "${minutes}"
+    else
+      printf "%s minutes, and " "${minutes}"
+    fi
+  else
+    if test 1 = "${minutes}"; then
+      printf "%s minute and " "${minutes}"
+    else
+      printf "%s minutes and " "${minutes}"
+    fi
+  fi
+fi
+
+if test 1 = "${seconds}"; then
+  printf "%s second\n" "${seconds}"
+else
+  printf "%s seconds\n" "${seconds}"
+fi

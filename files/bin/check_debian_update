@@ -34,16 +34,16 @@ if
   test $time_since_success -gt $max_time_since_success \
   || test $time_since_success -le 0
 then
-  echo "Debian update:  Critical!  Last successful update was ${time_since_success} seconds ago.  (Most recent return status:  ${ret})"
+  echo "Debian update:  Critical!  Last successful update was $(seconds_to_human "${time_since_success}") ago.  (Most recent return status:  ${ret})"
   exit $critical
 fi
 if test $ret -eq 0; then
-  echo "Debian update:  OK.  Last update returned ${ret} at ${time_since_success} seconds ago."
+  echo "Debian update:  OK.  Last update returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
   exit $happy
 fi
 if test $ret -eq 5; then
-  echo "Debian update:  Warning!  Last update returned ${ret} at ${time_since_success} seconds ago."
+  echo "Debian update:  Warning!  Last update returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
   exit $warning
 fi
-echo "Debian update:  Critical!  Last update returned ${ret} at ${time_since_success} seconds ago."
+echo "Debian update:  Critical!  Last update returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
 exit $critical

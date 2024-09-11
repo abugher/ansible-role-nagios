@@ -34,9 +34,9 @@ if
      test $delta -lt $max_delta \
   && test $delta -gt 0
 then
-  echo "Last update returned ${ret} at ${delta} seconds ago."
+  echo "Last update returned ${ret} at $(seconds_to_human "${delta}") ago."
   exit $happy
 else
-  echo "Last update returned ${ret} at ${delta} seconds ago."
+  echo "Last update returned ${ret} at $(seconds_to_human "${delta}") ago."
   exit $critical
 fi

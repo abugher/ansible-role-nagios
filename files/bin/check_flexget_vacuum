@@ -34,9 +34,9 @@ if
      test $delta -lt $max_delta \
   && test $delta -gt 0
 then
-  echo "flexget database vacuum:  OK.  Last instance returned ${ret} at ${delta} seconds ago."
+  echo "flexget database vacuum:  OK.  Last instance returned ${ret} at $(seconds_to_human "${delta}") ago."
   exit $happy
 else
-  echo "flexget database vacuum:  Critical!  Last instance returned ${ret} at ${delta} seconds ago."
+  echo "flexget database vacuum:  Critical!  Last instance returned ${ret} at $(seconds_to_human "${delta}") ago."
   exit $critical
 fi

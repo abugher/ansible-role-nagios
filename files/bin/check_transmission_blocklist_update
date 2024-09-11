@@ -35,9 +35,9 @@ if
      test $delta -lt $max_delta \
   && test $delta -gt 0
 then
-  echo "Transmission blocklist update OK.  Last update was ${delta} seconds ago."
+  echo "Transmission blocklist update OK.  Last update was $(seconds_to_human "${delta}") ago."
   exit $happy
 else
-  echo "Transmission blocklist update Critical!  Last update was ${delta} seconds ago."
+  echo "Transmission blocklist update Critical!  Last update was $(seconds_to_human "${delta}") ago."
   exit $critical
 fi
