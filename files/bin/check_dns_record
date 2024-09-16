@@ -1,11 +1,13 @@
 #!/bin/bash
 
-target=$1
+ssh_target="${1}"
+dns_name="${2}"
+dns_server="${3}"
 
-wan_ip_address=$(ssh $target dig +short myip.opendns.com @resolver1.opendns.com)
-dns_record=$(dig @8.8.8.8 +short neuronpointer.net)
+wan_ip_address=$(ssh $ssh_target dig +short myip.opendns.com @resolver1.opendns.com) || exit 2
+dns_record=$(dig @"${dns_server}" +short "${dns_name}") || exit 2
 
-echo "WAN IP address:  ${wan_ip_address};  neuronpointer.net:  ${dns_record}"
+echo "WAN IP address:  ${wan_ip_address};  "${dns_name}":  ${dns_record}"
 
 if test $wan_ip_address = $dns_record ; then
   exit 0
