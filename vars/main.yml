@@ -16,9 +16,6 @@ lines_not_in_files:
   - regexp:             'cfg_file=(.*)$'
     dest:               '/etc/nagios4/nagios.cfg'
 sync_dirs:
-  - src:                'files/conf/nagios4/conf.d/objects/'
-    dest:               '/etc/nagios4/conf.d/objects/'
-    delete:             'yes'
   - src:                'files/conf/nagios4/conf.d/services/'
     dest:               '/etc/nagios4/conf.d/services/'
     delete:             'yes'
@@ -84,6 +81,21 @@ template_files:
     mode:               '0644'
     src:                "templates/host_groups.cfg.j2"
     dest:               "/etc/nagios4/conf.d/host_groups.cfg"
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'templates/objects/commands.cfg.j2'
+    dest:               '/etc/nagios4/conf.d/objects/commands.cfg'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'templates/objects/contacts.cfg.j2'
+    dest:               '/etc/nagios4/conf.d/objects/contacts.cfg'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'templates/objects/timeperiods.cfg.j2'
+    dest:               '/etc/nagios4/conf.d/objects/timeperiods.cfg'
 commands:
   - command:            /usr/sbin/nagios4 -v /etc/nagios4/nagios.cfg
     changed_when:       False
