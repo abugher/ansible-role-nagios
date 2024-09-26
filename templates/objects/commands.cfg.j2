@@ -149,6 +149,11 @@ define command {
 }
 
 define command {
+  command_name  check_disk_capacity_root
+  command_line  /usr/local/bin/ssh_check_disk $HOSTADDRESS$ -w 15 -c 10 /
+}
+
+define command {
   command_name  check_disk_capacity_file_server
   command_line  /usr/local/bin/ssh_check_disk $HOSTADDRESS$ -w 15 -c 10 /storage
 }
