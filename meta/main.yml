@@ -6,3 +6,6 @@ dependencies:
   - role:     'ssh-client'
     tags:     
       - 'dependency'
+  - role:     'mail-client'
+    tags:     
+      - 'dependency'
