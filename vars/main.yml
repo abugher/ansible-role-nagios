@@ -5,6 +5,11 @@ install_packages:
   - "{{ php_fpm }}"
   - 'nmap'
   - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
+remove_packages:
+# isp-gateway sometimes has a link-local address (169.254.0.0/16) but is still
+# reachable via my gateway if avahi-autoipd is not allowed to create routing
+# rules.
+  - 'avahi-autoipd'
 lines_in_files:
   - line:               'date_format=iso8601'
     regexp:             '^date_format='
