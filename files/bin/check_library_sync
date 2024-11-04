@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# DISTRIBUTED BY ANSIBLE
+
+happy=0
+warning=1
+critical=2
+log_file='/var/log/library-sync.log'
+ret_file='/var/log/library-sync.ret'
+success_file='/var/log/library-sync.last-success'
+
+target="${1}"
+
+max_age_days=1
+max_time_since_success=$(( 60 * 60 * 24 * $max_age_days ))
+
+if ! now_timestamp="$(ssh "${target}" date "+%s")"; then
+  echo "Critical:  Failed to obtain current timestamp."
+  exit $critical
+fi
+
+if ! last_success_timestamp="$(ssh "${target}" cat "${success_file}")"; then
+  echo "Critical:  Failed to obtain timestamp of last success."
+  exit $critical
+fi
+
+time_since_success=$(( now_timestamp - last_success_timestamp ))
+
+ret="$(
+  ssh "${target}" cat "${ret_file}"
+)"
+
+if
+  test $time_since_success -gt $max_time_since_success \
+  || test $time_since_success -le 0
+then
+  echo "library-sync:  Critical!  Last successful sync was $(seconds_to_human "${time_since_success}") ago.  (Most recent return status:  ${ret})"
+  exit $critical
+fi
+if test $ret -eq 0; then
+  echo "library-sync:  OK.  Last sync returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
+  exit $happy
+fi
+echo "library-sync:  Critical!  Last sync returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
+exit $critical
