@@ -1,5 +1,5 @@
 server {
-  server_name           nagios nagios.{{ domain }};
+  server_name           nagios nagios.{{ domain }}{% for domain_alias in domain_aliases %} nagios.{{ domain_alias }}{% endfor %};
   return 301            https://nagios.{{ domain }}$request_uri;
 }
 

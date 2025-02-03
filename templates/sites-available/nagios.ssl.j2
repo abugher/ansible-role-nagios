@@ -12,7 +12,7 @@ server {
   listen                443 ssl;
   ssl_certificate       /etc/ssl/certs/chain.pem;
   ssl_certificate_key   /etc/ssl/private/{{ inventory_hostname }}.pem;
-  server_name           nagios nagios.{{ domain }};
+  server_name           nagios nagios.{{ domain }}{% for domain_alias in domain_aliases %} nagios.{{ domain_alias }}{% endfor %};
 
   root                  /usr/share/nagios4/htdocs;       
   index                 index.php index.html;
