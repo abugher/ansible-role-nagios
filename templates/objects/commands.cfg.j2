@@ -99,11 +99,6 @@ define command {
 }
 
 define command {
-  command_name  check_znc
-  command_line  /usr/local/bin/check_port $HOSTADDRESS$ 1110
-}
-
-define command {
   command_name  check_dns_example
   command_line  /usr/lib/nagios/plugins/check_dns -H example.com -s $HOSTADDRESS$
 }
