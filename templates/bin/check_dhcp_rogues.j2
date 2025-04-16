@@ -1,0 +1,53 @@
+#!/bin/bash
+
+
+max_age=$(( 15 * 60 ))
+
+
+function main() {
+  cd /var/log/observe_dhcp/servers/ || fail "Failed to change directory."
+
+  now="$(date +'%s')" || fail "Failed to get current time."
+  servers=[]
+  for server in *; do 
+    mtime="$(stat -c '%Y' "${server}/timestamp")" || fail "Failed to get time of last observation."
+    age=$(( now - mtime )) || fail "Failed to calculate age."
+    if test "${age}" -gt "${max_age}"; then
+      rm "${server}/timestamp" || fail "Failed to remove timestamp for server:  '${server}'"
+      rmdir "${server}" || fail "Failed to remove directory for server:  '${server}'"
+    else
+      is_dhcp_server="no"
+      {% for server in groups['dhcp-server'] %}
+      if test "${server}" = "{{ hostvars[server]['ip_address'] }}"; then
+        is_dhcp_server="yes"
+      fi
+      {% endfor %}
+      if test "no" = "${is_dhcp_server}"; then
+        fail "Unexpected DHCP server:  '${server}'"
+      fi
+    fi
+  done
+
+  succeed "No unexpected DHCP servers found."
+}
+
+
+function fail() {
+  printf "%s\n" "${1}"
+  exit 2
+}
+
+
+function warn_and_quit() {
+  printf "%s\n" "${1}"
+  exit 1
+}
+
+
+function succeed() {
+  printf "%s\n" "${1}"
+  exit 0
+}
+
+
+main

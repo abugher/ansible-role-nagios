@@ -212,3 +212,13 @@ define command {
   command_name  check_vpn_interface
   command_line  /usr/local/bin/check_vpn_interface $HOSTADDRESS$
 }
+
+define command {
+  command_name  check_dhcp_rogues
+  command_line  /usr/local/bin/check_dhcp_rogues
+}
+
+define command {
+  command_name  check_dhcp_service
+  command_line  /usr/lib/nagios/plugins/check_dhcp -s $HOSTADDRESS$
+}

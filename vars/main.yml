@@ -10,6 +10,22 @@ remove_packages:
 # reachable via my gateway if avahi-autoipd is not allowed to create routing
 # rules.
   - 'avahi-autoipd'
+create_files:
+  - owner:              'nagios'
+    group:              'nagios'
+    mode:               '0755'
+    path:               '/var/log/observe_dhcp'
+    state:              'directory'
+  - owner:              'nagios'
+    group:              'nagios'
+    mode:               '0755'
+    path:               '/var/log/observe_dhcp/servers'
+    state:              'directory'
+  - owner:              'nagios'
+    group:              'nagios'
+    mode:               '0755'
+    path:               '/var/log/observe_dhcp/clients'
+    state:              'directory'
 lines_in_files:
   - line:               'date_format=iso8601'
     regexp:             '^date_format='
@@ -101,6 +117,21 @@ template_files:
     mode:               '0644'
     src:                'templates/objects/timeperiods.cfg.j2'
     dest:               '/etc/nagios4/conf.d/objects/timeperiods.cfg'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0755'
+    src:                'templates/bin/observe_dhcp.j2'
+    dest:               '/usr/local/bin/observe_dhcp'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'templates/cron.d/observe_dhcp.j2'
+    dest:               '/etc/cron.d/observe_dhcp'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0755'
+    src:                'templates/bin/check_dhcp_rogues.j2'
+    dest:               '/usr/local/bin/check_dhcp_rogues'
 commands:
   - command:            /usr/sbin/nagios4 -v /etc/nagios4/nagios.cfg
     changed_when:       False
