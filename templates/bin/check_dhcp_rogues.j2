@@ -4,6 +4,9 @@
 max_age=$(( 15 * 60 ))
 
 
+shopt -s nullglob
+
+
 function main() {
   cd /var/log/observe_dhcp/servers/ || fail "Failed to change directory."
 
