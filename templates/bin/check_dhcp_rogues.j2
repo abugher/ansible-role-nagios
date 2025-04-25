@@ -14,8 +14,8 @@ function main() {
   now="$(date +'%s')" || fail "Failed to get current time."
   servers=[]
   for server in *; do 
-    mtime="$(stat -c '%Y' "${server}/timestamp")" || fail "Failed to get time of last observation."
-    age=$(( now - mtime )) || fail "Failed to calculate age."
+    mtime="$(stat -c '%Y' "${server}/timestamp")" || fail "Failed to get time of last observation for:  '${server}'"
+    age=$(( now - mtime )) || fail "Failed to calculate age for:  '${server}'"
     if test "${age}" -gt "${max_age}"; then
       rm "${server}/timestamp" || fail "Failed to remove timestamp for server:  '${server}'"
       rmdir "${server}" || fail "Failed to remove directory for server:  '${server}'"
