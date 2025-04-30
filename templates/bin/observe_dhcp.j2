@@ -7,15 +7,24 @@ read server_ip client_ip < <(
   /usr/lib/nagios/plugins/check_dhcp -v -m "${client_mac}" \
     | awk '/offer from server/ {print $6" "$10}'
 )
+
 if 
   test '' = "${server_ip}" \
-  || test '' = "${client_ip}"
+  || test '' = "${client_ip}" \
+  || test '/' = "${server_ip}" \
+  || test '/' = "${client_ip}"
 then
   continue
 fi
-mkdir "/var/log/observe_dhcp/servers/${server_ip}"
-touch "/var/log/observe_dhcp/servers/${server_ip}/timestamp"
-mkdir "/var/log/observe_dhcp/clients/${client_ip}"
-touch "/var/log/observe_dhcp/clients/${client_ip}/${client_mac}"
+
+server_dir_path="/var/log/observe_dhcp/servers/${server_ip}"
+server_file_path="/var/log/observe_dhcp/servers/${server_ip}/timestamp"
+client_dir_path="/var/log/observe_dhcp/clients/${client_ip}"
+client_file_path="/var/log/observe_dhcp/clients/${client_ip}/${client_mac}"
+
+mkdir "${server_dir_path}"
+printf '%s\n' "${server_file_path}" > "${server_file_path}"
+mkdir "${client_dir_path}"
+printf '%s\n' "${client_file_path}" > "${client_file_path}"
 
 {% endfor %}
