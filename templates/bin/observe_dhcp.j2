@@ -1,6 +1,12 @@
 #!/bin/bash
 
 {% for client in groups['dhcp-clients'] %}
+
+# unset client
+unset client_mac
+unset server_ip
+unset client_ip
+
 # client={{ client }}
 client_mac={{ hostvars[client]['mac_address'] }}
 read server_ip client_ip < <(
@@ -11,20 +17,27 @@ read server_ip client_ip < <(
 if 
   test '' = "${server_ip}" \
   || test '' = "${client_ip}" \
+  || test '' = "${client_mac}" \
   || test '/' = "${server_ip}" \
-  || test '/' = "${client_ip}"
+  || test '/' = "${client_ip}" \
+  || test '/' = "${client_mac}"
 then
-  continue
+  mkdir /var/log/observe_dhcp/problems
+  printf "%s\n%s\n%s\n" \
+    "client_mac='${client_mac}'" \
+    "server_ip='${server_ip}'" \
+    "client_ip='${client_ip}'" \
+    > /var/log/observe_dhcp/problems/"${server_ip}_${client_ip}_${client_mac}.log"
+else
+  server_dir_path="/var/log/observe_dhcp/servers/${server_ip}"
+  server_file_path="/var/log/observe_dhcp/servers/${server_ip}/timestamp"
+  client_dir_path="/var/log/observe_dhcp/clients/${client_ip}"
+  client_file_path="/var/log/observe_dhcp/clients/${client_ip}/${client_mac}"
+
+  mkdir "${server_dir_path}"
+  printf '%s\n' "${server_file_path}" > "${server_file_path}"
+  mkdir "${client_dir_path}"
+  printf '%s\n' "${client_file_path}" > "${client_file_path}"
 fi
-
-server_dir_path="/var/log/observe_dhcp/servers/${server_ip}"
-server_file_path="/var/log/observe_dhcp/servers/${server_ip}/timestamp"
-client_dir_path="/var/log/observe_dhcp/clients/${client_ip}"
-client_file_path="/var/log/observe_dhcp/clients/${client_ip}/${client_mac}"
-
-mkdir "${server_dir_path}"
-printf '%s\n' "${server_file_path}" > "${server_file_path}"
-mkdir "${client_dir_path}"
-printf '%s\n' "${client_file_path}" > "${client_file_path}"
 
 {% endfor %}
