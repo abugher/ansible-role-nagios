@@ -1,0 +1,13 @@
+#!/bin/bash
+
+host="${1}"
+service="${2}"
+ssh "${host}" "/usr/sbin/service '${service}' status" >/dev/null 2>&1
+service_ret="${?}"
+
+echo "\"service '${service}' status\" returned ${service_ret}."
+if test 0 = $service_ret; then
+  exit 0
+else
+  exit 2
+fi
