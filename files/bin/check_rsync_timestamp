@@ -1,44 +1,33 @@
 #!/bin/bash
 
-timestamp="$(
-  /usr/local/bin/agent_command "${1}" rsync_timestamp
-)" 
-agent_command_ret="${?}"
+happy=0
+warning=1
+critical=2
+success_file='/var/log/rsync_photos.last_success'
 
-if test '' == "${timestamp}"; then
-  echo "No recent log entries."
-  exit 2
+target="${1}"
+
+max_age_days=2
+max_time_since_success=$(( 60 * 60 * 24 * $max_age_days ))
+
+if ! now_timestamp="$(ssh "${target}" date "+%s")"; then
+  echo "Critical:  Failed to obtain current timestamp."
+  exit $critical
 fi
 
-if ! grep -q '^[0-9]*$' <<< "${timestamp}"; then
-  echo "Not a timestamp:  '${timestamp}'"
-  exit 2
+if ! last_success_timestamp="$(ssh "${target}" stat -c %Y "${success_file}")"; then
+  echo "Critical:  Failed to obtain timestamp of last success."
+  exit $critical
 fi
 
-if ! test 0 == "${agent_command_ret}"; then 
-  echo "Error:  agent_command returned:  ${agent_command_ret}"
-  echo "Host address:  ${1}"
-  echo "Output:  ${timestamp}"
-  exit 2
+time_since_success=$(( now_timestamp - last_success_timestamp ))
+
+if
+  test $time_since_success -gt $max_time_since_success \
+  || test $time_since_success -le 0
+then
+  echo "Critical!  Last success was $(seconds_to_human "${time_since_success}") ago."
+  exit $critical
 fi
-
-timestamp_hr="$(date -d "@${timestamp}" 2>&1)"
-now="$(date +%s 2>&1)"
-delta="$(( ${now} - ${timestamp} ))"
-now_hr="$(date -d "@${now}" 2>&1)"
-
-if ! grep -qE '^-{0,1}[0-9]*$' <<< "${delta}"; then
-  echo "Not a timestamp delta:  '${delta}'"
-  exit 2
-fi
-
-if test ${timestamp} -gt ${now}; then
-  echo "Timestamp is in the future:  ${timestamp_hr} (${timestamp})  Current time:  ${now_hr} (${now})"
-  exit 1
-elif test ${delta} -gt $(( 60 * 60 * 24 * 2 )); then
-  echo "Timestamp is more than two days old:  ${timestamp_hr} (${timestamp})"
-  exit 2
-else
-  echo "Timestamp is less than two days old:  ${timestamp_hr} (${timestamp})"
-fi
-
+echo "OK.  Last success was $(seconds_to_human "${time_since_success}") ago."
+exit $happy
