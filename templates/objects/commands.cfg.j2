@@ -199,8 +199,13 @@ define command {
 }
 
 define command {
-  command_name  check_rsync_timestamp
-  command_line  /usr/local/bin/check_rsync_timestamp $HOSTADDRESS$
+  command_name  check_timestamp_rsync_photos
+  command_line  /usr/local/bin/check_timestamp_rsync_photos $HOSTADDRESS$
+}
+
+define command {
+  command_name  check_timestamp_rsync_data
+  command_line  /usr/local/bin/check_timestamp_rsync_data $HOSTADDRESS$
 }
 
 define command {
