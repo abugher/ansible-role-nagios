@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/usr/local/bin/observe_dhcp > /var/log/observe_dhcp.log 2>&1
+echo "${?}" > /var/log/observe_dhcp.ret

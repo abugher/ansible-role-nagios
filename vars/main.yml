@@ -18,6 +18,16 @@ create_files:
     state:              'directory'
   - owner:              'nagios'
     group:              'nagios'
+    mode:               '0644'
+    path:               '/var/log/observe_dhcp.log'
+    state:              'touch'
+  - owner:              'nagios'
+    group:              'nagios'
+    mode:               '0644'
+    path:               '/var/log/observe_dhcp.ret'
+    state:              'touch'
+  - owner:              'nagios'
+    group:              'nagios'
     mode:               '0755'
     path:               '/var/log/observe_dhcp/servers'
     state:              'directory'
@@ -70,6 +80,11 @@ install_files:
     mode:               '0644'
     src:                "../../../sensitive-ansible/roles/nagios/files/conf/htpasswd.users"
     dest:               '/etc/nagios4/htpasswd.users'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0755'
+    src:                'files/bin/observe_dhcp_cronjob'
+    dest:               '/usr/local/bin/observe_dhcp_cronjob'
 remove_files:
   - '/etc/nagios4/objects/'
 symlinks:
