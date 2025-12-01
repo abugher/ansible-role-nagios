@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # https://www.debian.org/releases/
-debian_stable=12
+debian_stable=13
 # https://www.devuan.org/os/releases
-devuan_stable=4
+devuan_stable=5
 # https://wiki.ubuntu.com/Releases
 ubuntu_lts=(
   '22.04'
