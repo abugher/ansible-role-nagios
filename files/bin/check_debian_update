@@ -41,7 +41,7 @@ if test $ret -eq 0; then
   echo "Debian update:  OK.  Last update returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
   exit $happy
 fi
-if test $ret -eq 5; then
+if test $ret -eq 6; then
   echo "Debian update:  Warning!  Last update returned ${ret} at $(seconds_to_human "${time_since_success}") ago."
   exit $warning
 fi
