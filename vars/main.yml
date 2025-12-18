@@ -171,4 +171,3 @@ start_services:
   - 'nagios4'
   - "{{ php_fpm }}"
   - 'fcgiwrap'
-
