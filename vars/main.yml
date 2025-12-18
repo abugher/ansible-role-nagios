@@ -19,11 +19,6 @@ create_files:
     mode:               '0755'
     path:               '~nagios/.ssh/id_rsa'
     state:              'directory'
-  - owner:              'nagios'
-    group:              'nagios'
-    mode:               '0755'
-    path:               '/var/cache/nagios4'
-    state:              'directory'
   - owner:              'root'
     group:              'root'
     mode:               '0755'
@@ -167,12 +162,13 @@ enable_services:
   - 'nagios4'
   - "{{ php_fpm }}"
   - 'fcgiwrap'
-start_services:
-  - 'nagios4'
-  - "{{ php_fpm }}"
-  - 'fcgiwrap'
 restart_services:
   - 'nagios4'
   - "{{ php_fpm }}"
   - 'fcgiwrap'
   - 'nginx'
+start_services:
+  - 'nagios4'
+  - "{{ php_fpm }}"
+  - 'fcgiwrap'
+

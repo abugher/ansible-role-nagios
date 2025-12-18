@@ -12,14 +12,12 @@
     known_hosts:        "{% set monitored_sshd = [] %}{% set s = groups['sshd'] %}{% for h in groups['monitored'] %}{% if h in s %}{{ monitored_sshd.append(h) }}{% endif %}{% endfor %}{{ monitored_sshd }}"
 - include_tasks:        '../tasks/commands.yml'
 - include_tasks:        '../tasks/enable_services.yml'
-- include_tasks:        '../tasks/start_services.yml'
 - include_tasks:        '../tasks/restart_services.yml'
-  when:                 lines_in_files_result.changed
-                        or lines_not_in_files_result.changed
-                        or sync_dirs_result.changed
+  when:                 sync_dirs_result.changed
                         or install_files_result.changed
                         or remove_files_result.changed
                         or symlinks_result.changed
                         or template_files_result.changed
+- include_tasks:        '../tasks/start_services.yml'
 - include_tasks:        '../tasks/reboot.yml'
   when:                 remove_packages_result.changed
