@@ -1,10 +1,13 @@
 ---
-php_fpm:                'php8.2-fpm'
+php_fpm:                'php8.4-fpm'
 install_packages:
   - 'nagios4'
   - "{{ php_fpm }}"
   - 'nmap'
   - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
+  # linux-sysctl-defaults is probably installed by default in a fresh OS
+  # install, but it is not when upgrading from bookworm to trixie.
+  - 'linux-sysctl-defaults'             # Needed for ping.
 remove_packages:
 # isp-gateway sometimes has a link-local address (169.254.0.0/16) but is still
 # reachable via my gateway if avahi-autoipd is not allowed to create routing
