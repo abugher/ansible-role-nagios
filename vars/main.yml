@@ -16,8 +16,8 @@ remove_packages:
 create_files:
   - owner:              'nagios'
     group:              'nagios'
-    mode:               '0755'
-    path:               '~nagios/.ssh/id_rsa'
+    mode:               '0750'
+    path:               '~nagios/.ssh'
     state:              'directory'
   - owner:              'root'
     group:              'root'
