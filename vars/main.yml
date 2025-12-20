@@ -8,6 +8,7 @@ install_packages:
   # linux-sysctl-defaults is probably installed by default in a fresh OS
   # install, but it is not when upgrading from bookworm to trixie.
   - 'linux-sysctl-defaults'             # Needed for ping.
+  - 'bind9-dnsutils'                    # Needed for dig command, for check_dns_record.
 remove_packages:
 # isp-gateway sometimes has a link-local address (169.254.0.0/16) but is still
 # reachable via my gateway if avahi-autoipd is not allowed to create routing
