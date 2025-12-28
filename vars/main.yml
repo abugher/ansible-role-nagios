@@ -1,8 +1,8 @@
 ---
 php_fpm:                'php{{ php_version }}-fpm'
 install_packages:
-  - 'nagios4'
   - "{{ php_fpm }}"
+  - 'nagios4'
   - 'nmap'
   - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
   # linux-sysctl-defaults is probably installed by default in a fresh OS
