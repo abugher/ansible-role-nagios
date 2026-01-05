@@ -139,6 +139,11 @@ define command {
 }
 
 define command {
+  command_name  check_certbot
+  command_line  /usr/local/bin/check_certbot $HOSTADDRESS$
+}
+
+define command {
   command_name  check_flexget_vacuum
   command_line  /usr/local/bin/check_flexget_vacuum $HOSTADDRESS$
 }
