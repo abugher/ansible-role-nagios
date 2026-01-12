@@ -156,6 +156,11 @@ template_files:
     mode:               '0755'
     src:                'templates/bin/check_dhcp_rogues.j2'
     dest:               '/usr/local/bin/check_dhcp_rogues'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0755'
+    src:                'templates/bin/check_debian_update.j2'
+    dest:               '/usr/local/bin/check_debian_update'
 commands:
   - command:            /usr/sbin/nagios4 -v /etc/nagios4/nagios.cfg
     changed_when:       False
