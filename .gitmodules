@@ -1,3 +1,18 @@
 [submodule "files/nagios-core-dark-theme"]
 	path = files/nagios-core-dark-theme
 	url = git@github.com:abugher/nagios-core-dark-theme.git
+[submodule "tasks/common"]
+	path = tasks/common
+	url = git@github.com:abugher/ansible-common-tasks.git
+[submodule "inventory"]
+	path = inventory
+	url = git@github.com:abugher/ansible-inventory.git
+[submodule "environment"]
+	path = environment
+	url = git@github.com:abugher/ansible-environment.git
+[submodule "sensitive"]
+	path = sensitive
+	url = ansible@files:/storage/control-center/sensitive-ansible-role-nagios.git
+[submodule "sensitive-inventory"]
+	path = sensitive-inventory
+	url = ansible@files:/storage/control-center/sensitive-ansible-inventory.git

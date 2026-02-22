@@ -1,24 +1,24 @@
 ---
 - include_vars:         '../roles/automatic-updates/vars/return_codes.yml'
-- include_tasks:        '../tasks/install_packages.yml'
-- include_tasks:        '../tasks/remove_packages.yml'
-- include_tasks:        '../tasks/create_files.yml'
-- include_tasks:        '../tasks/sync_dirs.yml'
-- include_tasks:        '../tasks/install_files.yml'
-- include_tasks:        '../tasks/remove_files.yml'
-- include_tasks:        '../tasks/symlinks.yml'
-- include_tasks:        '../tasks/template_files.yml'
-- include_tasks:        '../tasks/known_hosts.yml'
+- include_tasks:        'tasks/common/install_packages.yml'
+- include_tasks:        'tasks/common/remove_packages.yml'
+- include_tasks:        'tasks/common/create_files.yml'
+- include_tasks:        'tasks/common/sync_dirs.yml'
+- include_tasks:        'tasks/common/install_files.yml'
+- include_tasks:        'tasks/common/remove_files.yml'
+- include_tasks:        'tasks/common/symlinks.yml'
+- include_tasks:        'tasks/common/template_files.yml'
+- include_tasks:        'tasks/common/known_hosts.yml'
   vars:
     known_hosts:        "{% set monitored_sshd = [] %}{% set s = groups['sshd'] %}{% for h in groups['monitored'] %}{% if h in s %}{{ monitored_sshd.append(h) }}{% endif %}{% endfor %}{{ monitored_sshd }}"
-- include_tasks:        '../tasks/commands.yml'
-- include_tasks:        '../tasks/enable_services.yml'
-- include_tasks:        '../tasks/restart_services.yml'
+- include_tasks:        'tasks/common/commands.yml'
+- include_tasks:        'tasks/common/enable_services.yml'
+- include_tasks:        'tasks/common/restart_services.yml'
   when:                 sync_dirs_result.changed
                         or install_files_result.changed
                         or remove_files_result.changed
                         or symlinks_result.changed
                         or template_files_result.changed
-- include_tasks:        '../tasks/start_services.yml'
-- include_tasks:        '../tasks/reboot.yml'
+- include_tasks:        'tasks/common/start_services.yml'
+- include_tasks:        'tasks/common/reboot.yml'
   when:                 remove_packages_result.changed

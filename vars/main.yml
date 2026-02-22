@@ -77,12 +77,12 @@ install_files:
   - owner:              'nagios'
     group:              'nagios'
     mode:               '0600'
-    src:                "../../../sensitive-ansible/inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa"
+    src:                "sensitive-inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa"
     dest:               '~nagios/.ssh/id_rsa'
   - owner:              'nagios'
     group:              'nagios'
     mode:               '0644'
-    src:                "{{ role_path }}/../../inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa.pub"
+    src:                "inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa.pub"
     dest:               '~nagios/.ssh/id_rsa.pub'
   - owner:              'root'
     group:              'root'
@@ -92,7 +92,7 @@ install_files:
   - owner:              'root'
     group:              'www-data'
     mode:               '0640'
-    src:                "../../../sensitive-ansible/roles/nagios/files/conf/htpasswd.users"
+    src:                "sensitive/files/conf/htpasswd.users"
     dest:               '/etc/nagios4/htpasswd.users'
 remove_files:
   - '/etc/nagios4/objects/'
