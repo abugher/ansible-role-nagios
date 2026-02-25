@@ -77,12 +77,12 @@ install_files:
   - owner:              'nagios'
     group:              'nagios'
     mode:               '0600'
-    src:                "sensitive-inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa"
+    src:                "{{ sensitive_inventory_path }}/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa"
     dest:               '~nagios/.ssh/id_rsa'
   - owner:              'nagios'
     group:              'nagios'
     mode:               '0644'
-    src:                "inventory/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa.pub"
+    src:                "{{ inventory_path }}/hosts/{{ inventory_hostname }}/users/nagios/files/ssh_keys/id_rsa.pub"
     dest:               '~nagios/.ssh/id_rsa.pub'
   - owner:              'root'
     group:              'root'
