@@ -25,10 +25,16 @@ then
   # No address received.  Maybe the server is rebooting.
   true
 else
-  server_dir_path="/var/log/observe_dhcp/servers/${server_ip}"
-  server_file_path="/var/log/observe_dhcp/servers/${server_ip}/timestamp"
-  client_dir_path="/var/log/observe_dhcp/clients/${client_ip}"
-  client_file_path="/var/log/observe_dhcp/clients/${client_ip}/${client_mac}"
+  # Armbian specific workaround:  Avoid creating files or directories ending in
+  # a number.  Such files will be interpreted as older rotated logs and a
+  # removal attempt will be made when /var/log is approaching full.  That is
+  # done by `/usr/lib/armbian/armbian-truncate-logs`, called by
+  # `/etc/cron.d/armbian-truncate-logs`, both provided by package
+  # `armbian-bsp-cli-odroidxu4-current`.
+  server_dir_path="/var/log/observe_dhcp/servers/${server_ip}_ip"
+  server_file_path="/var/log/observe_dhcp/servers/${server_ip}_ip/timestamp"
+  client_dir_path="/var/log/observe_dhcp/clients/${client_ip}_ip"
+  client_file_path="/var/log/observe_dhcp/clients/${client_ip}_ip/${client_mac}_mac"
 
   mkdir "${server_dir_path}"
   printf '%s\n' "${server_file_path}" > "${server_file_path}"
