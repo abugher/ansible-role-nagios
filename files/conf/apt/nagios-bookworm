@@ -1,0 +1,5 @@
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1123716
+# Keep the old version until I get the bug resolved.
+Package: nagios4 nagios4-cgi nagios4-common nagios4-core
+Pin: release n=bookworm
+Pin-Priority: 900

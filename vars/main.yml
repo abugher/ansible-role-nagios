@@ -2,7 +2,8 @@
 php_fpm:                'php{{ php_version }}-fpm'
 install_packages:
   - "{{ php_fpm }}"
-  - 'nagios4'
+  # See code and comments in:  tasks/main.yml
+  #- 'nagios4'
   - 'nmap'
   - 'monitoring-plugins-standard'       # Needed for check_dns, at least.
   # linux-sysctl-defaults is probably installed by default in a fresh OS
@@ -94,6 +95,12 @@ install_files:
     mode:               '0640'
     src:                "sensitive/files/conf/htpasswd.users"
     dest:               '/etc/nagios4/htpasswd.users'
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1123716
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'files/conf/apt/nagios-bookworm'
+    dest:               '/etc/apt/preferences.d/nagios-bookworm'
 remove_files:
   - '/etc/nagios4/objects/'
 symlinks:
